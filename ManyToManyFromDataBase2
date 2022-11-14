@@ -1,0 +1,34 @@
+EntityManagerFactory emf=Persistence.createEntityManagerFactory("VS2DAWTESTJPAMTM5");
+		EntityManager em=emf.createEntityManager();
+		Autor autor=new Autor();
+		Autor coautor=new Autor();
+		autor.setIdautor(1L);
+		autor.setNombre("Eduardo Gonzales");
+		coautor.setIdautor(2L);
+		coautor.setNombre("Alexandru Baciu");
+		Libro libro=new Libro();
+		libro.setIsbn("ISBN-1");
+		libro.setTitulo("LIBRO ISBN-1");
+		libro.addAutor(autor);
+		libro.addAutor(coautor);
+		EntityTransaction tx=em.getTransaction();
+		tx.begin();
+		em.persist(autor);
+		em.persist(coautor);
+		em.persist(libro);
+		tx.commit();
+		libro=new Libro();
+		libro.setIsbn("ISBN-2");
+		libro.setTitulo("LIBRO ISBN-2");
+		autor.addLibro(libro);
+		tx.begin();
+		em.persist(libro);
+		tx.commit();
+		System.out.println("--------------------------------------------------------------");
+		// em.refresh(autor);
+		System.out.println("--LIBROS DEL AUTOR ANTONIO GONCALVES: ");
+		for (Libro l: autor.getLibros())
+		System.out.println(l.getTitulo());
+		em.close();
+		emf.close();
+	
