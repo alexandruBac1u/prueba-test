@@ -1,0 +1,32 @@
+EntityManagerFactory emf= Persistence.createEntityManagerFactory("VS2DAWTESTJPAMTM5");
+		EntityManager em= emf.createEntityManager();
+		Autor autor=new Autor();
+		Autor coautor=new Autor();
+	
+		autor.setIdautor(1L);
+		autor.setNombre("Miguel Federico");
+		coautor.setIdautor(2L);
+		coautor.setNombre("Alberto Alexandru Baciu");
+		
+		Libro libro=new Libro();
+		libro.setIsbn("ISBN-1");
+		libro.setTitulo("LIBRO ISBN-1");
+		
+		autor.addLibro(libro);
+		coautor.addLibro(libro);
+		libro.addAutor(autor);
+		libro.addAutor(coautor);
+		EntityTransaction tx=em.getTransaction();
+		tx.begin();
+		em.persist(autor);
+		em.persist(coautor);
+		em.persist(libro);
+		tx.commit();
+		System.out.println("----------------ANTES DEL REFRESH-------------");
+		em.refresh(autor);
+		
+		System.out.println("--- libros del autor miguel Federico");
+		for(Libro l:autor.getLibros())
+			System.out.println(l.getTitulo());
+		em.close();
+		emf.close();
